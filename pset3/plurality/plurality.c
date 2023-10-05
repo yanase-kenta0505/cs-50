@@ -10,8 +10,7 @@ typedef struct
 {
     string name;
     int votes;
-}
-candidate;
+} candidate;
 
 // Array of candidates
 candidate candidates[MAX];
@@ -66,15 +65,15 @@ int main(int argc, string argv[])
 // Update vote totals given a new vote
 bool vote(string name)
 {
-    for (int i = 0; i < candidate_count; i++) 
+    for (int i = 0; i < candidate_count; i++)
     {
-        if (strcmp(candidates[i].name, name) == 0) 
+        if (strcmp(candidates[i].name, name) == 0)
         {
             candidates[i].votes++;
             return true;
         }
     }
-    
+
     return false;
 }
 
@@ -82,20 +81,25 @@ bool vote(string name)
 void print_winner(void)
 {
     int max_votes = candidates[0].votes;
-    int max_candidate_index = 0;
+    // int max_candidate_index = 0;
 
-    for (int i = 0; i < candidate_count; i++) 
+    // 最大の投票数を探す
+    for (int i = 0; i < candidate_count; i++)
     {
-        if (candidates[i].votes > max_votes) 
+        if (candidates[i].votes > max_votes)
         {
             max_votes = candidates[i].votes;
-            max_candidate_index = i;
         }
     }
-    
-    printf("%s", candidates[max_candidate_index].name);
-    printf("\n");
-    
+
+    // 最大の投票数と同じ投票数をもつ者を表示する
+    for (int i = 0; i < candidate_count; i++)
+    {
+        if (candidates[i].votes == max_votes)
+        {
+            printf("%s\n", candidates[i].name);
+        }
+    }
+
     return;
 }
-
