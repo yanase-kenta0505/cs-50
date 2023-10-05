@@ -1,5 +1,6 @@
 #include <cs50.h>
 #include <stdio.h>
+#include <string.h>
 
 // Max number of candidates
 #define MAX 9
@@ -15,8 +16,7 @@ typedef struct
 {
     int winner;
     int loser;
-}
-pair;
+} pair;
 
 // Array of candidates
 string candidates[MAX];
@@ -32,6 +32,7 @@ void add_pairs(void);
 void sort_pairs(void);
 void lock_pairs(void);
 void print_winner(void);
+void print_preferences(void);
 
 int main(int argc, string argv[])
 {
@@ -86,6 +87,8 @@ int main(int argc, string argv[])
 
         record_preferences(ranks);
 
+        print_preferences();
+
         printf("\n");
     }
 
@@ -101,10 +104,11 @@ bool vote(int rank, string name, int ranks[])
 {
     for (int i = 0; i < candidate_count; i++)
     {
-      if (strcmp(candidate[i].naem, name) == 0) 
-      {
-        ranks[i].
-      }   
+        if (strcmp(candidates[i], name) == 0)
+        {
+            ranks[rank] = i;
+            return true;
+        }
     }
 
     return false;
@@ -113,7 +117,17 @@ bool vote(int rank, string name, int ranks[])
 // Update preferences given one voter's ranks
 void record_preferences(int ranks[])
 {
-    // TODO
+    for (int i = 0; i < candidate_count; i++)
+    {
+        for (int j = i + 1; j < candidate_count; j++)
+        {
+            int popular_candidate = ranks[i];
+            int unpopular_candidate = ranks[j];
+
+            preferences[popular_candidate][unpopular_candidate]++;
+        }
+    }
+
     return;
 }
 
@@ -145,3 +159,14 @@ void print_winner(void)
     return;
 }
 
+
+void print_preferences(void)
+{
+    for (int i = 0; i < candidate_count; i++)
+    {
+        for (int j = 0; j < candidate_count; j++)
+        {
+            printf("Preferences[%i][%i] = %i\n", i, j, preferences[i][j]);
+        }
+    }
+}
