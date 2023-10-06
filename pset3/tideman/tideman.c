@@ -31,9 +31,8 @@ void record_preferences(int ranks[]);
 void add_pairs(void);
 void sort_pairs(void);
 void lock_pairs(void);
+bool check(int winner, int loser);
 void print_winner(void);
-void print_preferences(void);
-void print_pairs(void);
 
 int main(int argc, string argv[])
 {
@@ -88,13 +87,10 @@ int main(int argc, string argv[])
 
         record_preferences(ranks);
 
-        print_preferences();
-
         printf("\n");
     }
 
     add_pairs();
-    print_pairs();
     sort_pairs();
     lock_pairs();
     print_winner();
@@ -179,14 +175,13 @@ void sort_pairs(void)
             // preferences[0][2] = 3
             // preferences[1][2] = 3
 
- 
-            int prev_preferences = preferences[pairs[j].winner][pairs[j].loser];  // 例）preferences[0][1] = 2
+            int prev_preferences = preferences[pairs[j].winner][pairs[j].loser];         // 例）preferences[0][1] = 2
             int next_preferences = preferences[pairs[j + 1].winner][pairs[j + 1].loser]; // 例）preferences[0][2] = 3
 
             if (prev_preferences < next_preferences)
             {
-                prev_preferencesよりnext_preferencesの方が大きい（得票数が高い）場合は入れ替える必要がある
-                pair origin_prev_pair = pairs[j]; //　入れ替え前の元々のデータを変数に格納
+                // prev_preferencesよりnext_preferencesの方が大きい（得票数が高い）場合は入れ替える必要がある
+                pair origin_prev_pair = pairs[j]; // 　入れ替え前の元々のデータを変数に格納
                 pairs[j] = pairs[j + 1];
                 pairs[j + 1] = origin_prev_pair;
             }
@@ -197,32 +192,60 @@ void sort_pairs(void)
 // Lock pairs into the candidate graph in order, without creating cycles
 void lock_pairs(void)
 {
-    // TODO
+    for (int i = 0; i < pair_count; i++)
+    {
+        if (!check(pairs[i].winner, pairs[i].loser))
+        {
+            locked[pairs[i].winner][pairs[i].loser] = true;
+        }
+    }
     return;
+}
+
+bool check(int winner, int loser)
+{
+    if (winner == loser)
+    {
+        return true;
+    }
+
+    for (int i = 0; i < candidate_count; i++)
+    {
+        // 再帰的にチェックを行う
+        // locked[loser][i] → loserが勝っている相手がいる
+        // これを繰り返してループをチェックする
+        if (locked[loser][i] && check(winner, i))
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 // Print the winner of the election
 void print_winner(void)
 {
-    // TODO
-    return;
-}
-
-void print_preferences(void)
-{
     for (int i = 0; i < candidate_count; i++)
     {
+        bool winner_existence = true;
+
         for (int j = 0; j < candidate_count; j++)
         {
-            printf("Preferences[%i][%i] = %i\n", i, j, preferences[i][j]);
+            // 候補者A、B、Cがいた場合を想定
+            // locked[B][A]の矢印が成立した場合、Aは勝者にならない
+            if (locked[j][i])
+            {
+                winner_existence = false;
+                break;
+            }
+        }
+
+        if (winner_existence)
+        {
+            printf("%s\n", candidates[i]);
+            return;
         }
     }
-}
 
-void print_pairs(void)
-{
-    for (int i = 0; i < pair_count; i++)
-    {
-        printf("Pair %i: %s (winner) - %s (loser)\n", i + 1, candidates[pairs[i].winner], candidates[pairs[i].loser]);
-    }
+    return;
 }
