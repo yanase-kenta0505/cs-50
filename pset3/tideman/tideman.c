@@ -33,6 +33,7 @@ void sort_pairs(void);
 void lock_pairs(void);
 void print_winner(void);
 void print_preferences(void);
+void print_pairs(void);
 
 int main(int argc, string argv[])
 {
@@ -93,6 +94,7 @@ int main(int argc, string argv[])
     }
 
     add_pairs();
+    print_pairs();
     sort_pairs();
     lock_pairs();
     print_winner();
@@ -134,17 +136,17 @@ void record_preferences(int ranks[])
 // Record pairs of candidates where one is preferred over the other
 void add_pairs(void)
 {
-    pair_count = 0
+    pair_count = 0;
 
         for (int i = 0; i < candidate_count; i++)
     {
-        for (int j = 0; j < candidate_count; j++)
+        for (int j = i + 1; j < candidate_count; j++)
         {
             if (preferences[i][j] > preferences[j][i])
             {
                 pairs[pair_count].winner = i;
-                pairs[pair_count].loser = i;
-                pairs++;
+                pairs[pair_count].loser = j;
+                pair_count++;
             }
             else if (preferences[j][i] > preferences[i][j])
             {
@@ -187,5 +189,13 @@ void print_preferences(void)
         {
             printf("Preferences[%i][%i] = %i\n", i, j, preferences[i][j]);
         }
+    }
+}
+
+void print_pairs(void)
+{
+    for (int i = 0; i < pair_count; i++)
+    {
+        printf("Pair %i: %s (winner) - %s (loser)\n", i + 1, candidates[pairs[i].winner], candidates[pairs[i].loser]);
     }
 }
