@@ -138,7 +138,7 @@ void add_pairs(void)
 {
     pair_count = 0;
 
-        for (int i = 0; i < candidate_count; i++)
+    for (int i = 0; i < candidate_count; i++)
     {
         for (int j = i + 1; j < candidate_count; j++)
         {
@@ -163,8 +163,35 @@ void add_pairs(void)
 // Sort pairs in decreasing order by strength of victory
 void sort_pairs(void)
 {
-    // TODO
-    return;
+    for (int i = 0; i < pair_count - 1; i++)
+    {
+        for (int j = 0; j < pair_count - i - 1; j++)
+        {
+            // pairsの構造例
+            // [
+            //     {winner: 0, loser: 1},
+            //     {winner: 0, loser: 2}
+            //     {winner: 1, loser: 2}
+            // ]
+
+            // preferencesの構造例
+            // preferences[0][1] = 2
+            // preferences[0][2] = 3
+            // preferences[1][2] = 3
+
+ 
+            int prev_preferences = preferences[pairs[j].winner][pairs[j].loser];  // 例）preferences[0][1] = 2
+            int next_preferences = preferences[pairs[j + 1].winner][pairs[j + 1].loser]; // 例）preferences[0][2] = 3
+
+            if (prev_preferences < next_preferences)
+            {
+                prev_preferencesよりnext_preferencesの方が大きい（得票数が高い）場合は入れ替える必要がある
+                pair origin_prev_pair = pairs[j]; //　入れ替え前の元々のデータを変数に格納
+                pairs[j] = pairs[j + 1];
+                pairs[j + 1] = origin_prev_pair;
+            }
+        }
+    }
 }
 
 // Lock pairs into the candidate graph in order, without creating cycles
