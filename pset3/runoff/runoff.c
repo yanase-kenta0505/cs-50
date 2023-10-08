@@ -1,5 +1,6 @@
 #include <cs50.h>
 #include <stdio.h>
+#include <math.h>
 
 // Max voters and candidates
 #define MAX_VOTERS 100
@@ -169,6 +170,21 @@ void tabulate(void)
 // Print the winner of the election, if there is one
 bool print_winner(void)
 {
+    // 過半数の投票数を計算する
+    int majority_vote = (int)round((double)voter_count / 2.0);
+
+    for (int i = 0; i < candidate_count; i++)
+    {
+        if (candidates[i].votes >= majority_vote)
+        {
+            printf("%s\n", candidates[i].name);
+
+            return true;
+        }
+
+        return false;
+    }
+
     // TODO
     return false;
 }
