@@ -1,5 +1,6 @@
 #include <cs50.h>
 #include <stdio.h>
+#include <string.h>
 #include <math.h>
 
 // Max voters and candidates
@@ -138,8 +139,6 @@ bool vote(int voter, int rank, string name)
 
             return true;
         }
-
-        return false;
     }
 
     return false;
