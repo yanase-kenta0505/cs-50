@@ -14,8 +14,7 @@ typedef struct
     string name;
     int votes;
     bool eliminated;
-}
-candidate;
+} candidate;
 
 // Array of candidates
 candidate candidates[MAX_CANDIDATES];
@@ -134,22 +133,12 @@ bool vote(int voter, int rank, string name)
         // リストに存在しない名前の場合
         if (strcmp(candidates[i].name, name) == 0)
         {
-            return false;
-        }
-
-        // リストにある名前が入力されたとき
-        // その入力名が候補者リストの何番目になるかチェック
-        // preferences[i]に登録
-        // 候補者A、B、Cの場合はそれぞれ0、1、2となる
-        for (int j = 0; j < candidate_count; i++)
-        {
-            if (candidates[j].name == name)
-            {
-                preferences[i] = j
-            }
-        }
+            preferences[voter][rank] = i;
 
         return true;
+        }
+
+        return false;
     }
 
     return false;
