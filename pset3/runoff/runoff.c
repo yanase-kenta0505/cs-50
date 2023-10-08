@@ -48,7 +48,7 @@ int main(int argc, string argv[])
         printf("Maximum number of candidates is %i\n", MAX_CANDIDATES);
         return 2;
     }
-    for (int i = 0; i < candidate_count; i++) 
+    for (int i = 0; i < candidate_count; i++)
     {
         candidates[i].name = argv[i + 1];
         candidates[i].votes = 0;
@@ -135,7 +135,7 @@ bool vote(int voter, int rank, string name)
         {
             preferences[voter][rank] = i;
 
-        return true;
+            return true;
         }
 
         return false;
@@ -147,7 +147,22 @@ bool vote(int voter, int rank, string name)
 // Tabulate votes for non-eliminated candidates
 void tabulate(void)
 {
-    // TODO
+    for (int i = 0; i < voter_count; i++)
+    {
+
+        for (int j = 0; j < candidate_count; j++)
+        {
+            // iは投票者番号、jはランク（第何候補）
+            // i番目の投票者の第j候補が除外されてないか（eliminatedがfalseか）どうかを確認する
+            // i番目の投票者の第j候補 = preferences[i][j]
+            if (!candidates[preferences[i][j]].eliminated)
+            {
+                candidates[preferences[i][j]].votes++;
+                break;
+            }
+        }
+    }
+
     return;
 }
 
