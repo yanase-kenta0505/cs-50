@@ -78,39 +78,46 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
 // Blur image
 void blur(int height, int width, RGBTRIPLE image[height][width])
 {
-    // 各ピクセルに対してぼかしを計算
+    RGBTRIPLE temp[height][width];
+    
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
         {
-            int tempRed = 0;
-            int tempGreen = 0;
-            int tempBlue = 0;
+            float totalRed = 0.0;
+            float totalGreen = 0.0;
+            float totalBlue = 0.0;
             int count = 0;
-
-            // 3x3のグリッド内のピクセルを処理
+            
             for (int row = -1; row <= 1; row++)
             {
                 for (int col = -1; col <= 1; col++)
                 {
-                    int newRow = i + row;
-                    int newCol = j + col;
-
-                    // 画像の範囲内かどうかを確認
-                    if (newRow >= 0 && newRow < height && newCol >= 0 && newCol < width)
+                    int new_row = i + row;
+                    int new_col = j + col;
+                    
+                    // この条件式であればコーナーやエッジに対応できる
+                    if (new_row >= 0 && new_row < height && new_col >= 0 && new_col < width)
                     {
-                        tempRed += image[newRow][newCol].rgbtRed;
-                        tempGreen += image[newRow][newCol].rgbtGreen;
-                        tempBlue += image[newRow][newCol].rgbtBlue;
+                        totalRed += image[new_row][new_col].rgbtRed;
+                        totalGreen += image[new_row][new_col].rgbtGreen;
+                        totalBlue += image[new_row][new_col].rgbtBlue;
                         count++;
                     }
                 }
             }
-
-            // 平均値を計算して元の画像に格納
-            image[i][j].rgbtRed = round((float)tempRed / count);
-            image[i][j].rgbtGreen = round((float)tempGreen / count);
-            image[i][j].rgbtBlue = round((float)tempBlue / count);
+            
+            temp[i][j].rgbtRed = (int)round(totalRed / count);
+            temp[i][j].rgbtGreen = (int)round(totalGreen / count);
+            temp[i][j].rgbtBlue = (int)round(totalBlue / count);
+        }
+    }
+    
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            image[i][j] = temp[i][j];
         }
     }
 }
