@@ -13,7 +13,7 @@ int integer_control(float value)
     }
     else
     {
-        return (int)round(value);
+        return (int) round(value);
     }
 }
 
@@ -24,11 +24,11 @@ void grayscale(int height, int width, RGBTRIPLE image[height][width])
     {
         for (int j = 0; j < width; j++)
         {
-            float average_color = (float)(image[i][j].rgbtBlue + image[i][j].rgbtGreen + image[i][j].rgbtRed) / 3;
+            float average_color = (float) (image[i][j].rgbtBlue + image[i][j].rgbtGreen + image[i][j].rgbtRed) / 3;
 
-            image[i][j].rgbtBlue = (int)(round(average_color));
-            image[i][j].rgbtGreen = (int)(round(average_color));
-            image[i][j].rgbtRed = (int)(round(average_color));
+            image[i][j].rgbtBlue = (int) (round(average_color));
+            image[i][j].rgbtGreen = (int) (round(average_color));
+            image[i][j].rgbtRed = (int) (round(average_color));
         }
     }
 
@@ -96,7 +96,6 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
                     int new_row = i + row;
                     int new_col = j + col;
                     
-                    // この条件式であればコーナーやエッジに対応できる
                     if (new_row >= 0 && new_row < height && new_col >= 0 && new_col < width)
                     {
                         totalRed += image[new_row][new_col].rgbtRed;
@@ -107,9 +106,9 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
                 }
             }
             
-            temp[i][j].rgbtRed = (int)round(totalRed / count);
-            temp[i][j].rgbtGreen = (int)round(totalGreen / count);
-            temp[i][j].rgbtBlue = (int)round(totalBlue / count);
+            temp[i][j].rgbtRed = (int) round(totalRed / count);
+            temp[i][j].rgbtGreen = (int) round(totalGreen / count);
+            temp[i][j].rgbtBlue = (int) round(totalBlue / count);
         }
     }
     
