@@ -1,4 +1,5 @@
 #include "helpers.h"
+#include <math.h>
 
 // Convert image to grayscale
 void grayscale(int height, int width, RGBTRIPLE image[height][width])
@@ -84,6 +85,22 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
     }
 }
 
+int integer_control(float value)
+{
+    if (value < 0)
+    {
+        return 0;
+    }
+    else if (value > 255)
+    {
+        return 255;
+    }
+    else
+    {
+        return (int)round(value);
+    }
+}
+
 // Detect edges
 void edges(int height, int width, RGBTRIPLE image[height][width])
 {
@@ -111,20 +128,34 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
                     int new_col = j + col;
 
                     if (new_row < 0 || new_row >= height || new_col < 0 || new_col >= width)
-                    {  // 画像の端にある場合、次のループへスキップする
+                    { // 画像の端にある場合、次のループへスキップする
                         continue;
                     }
 
-                    gx_red += kernel[row + 1][col +1]*image[new_row][new_col].rgbtRed
-
-
-
-
-
+                    gx_red += kernel[row + 1][col + 1] * image[new_row][new_col].rgbtRed;
+                    gx_green += kernel[row + 1][col + 1] * image[new_row][new_col].rgbtGreen;
+                    gx_blue += kernel[row + 1][col + 1] * image[new_row][new_col].rgbtBlue;
+                    gy_red += kernel[row + 1][col + 1] * image[new_row][new_col].rgbtRed;
+                    gy_green += kernel[row + 1][col + 1] * image[new_row][new_col].rgbtGreen;
+                    gy_blue += kernel[row + 1][col + 1] * image[new_row][new_col].rgbtBlue;
                 }
             }
+
+            int calculated_red = integer_control(sqrt(gx_red * gx_red + gy_red * gy_red));
+            int calculated_green = integer_control(sqrt(gx_green * gx_green + gy_green * gy_green));
+            int calculated_blue = integer_control(sqrt(gx_blue * gx_blue + gy_blue * gy_blue));
+
+            temp[i][j].rgbtRed = calculated_red;
+            temp[i][j].rgbtGreen = calculated_green;
+            temp[i][j].rgbtBlue = calculated_blue;
         }
     }
 
-    return;
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            image[i][j] = temp[i][j];
+        }
+    }
 }
