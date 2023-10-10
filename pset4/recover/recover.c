@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 typedef uint8_t BYTE;
@@ -39,6 +39,8 @@ int main(int argc, char *argv[])
             }
 
             char filename[8];
+
+            // file名を000.jpg - 999.jpgになるようにする
             sprintf(filename, "%03d.jpg", count++);
             output_file = fopen(filename, "w");
             if (output_file == NULL)
@@ -54,6 +56,7 @@ int main(int argc, char *argv[])
             fwrite(buffer, sizeof(BYTE), 512, output_file);
         }
     }
+
     if (output_file != NULL)
     {
         fclose(output_file);
