@@ -42,7 +42,7 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
 void blur(int height, int width, RGBTRIPLE image[height][width])
 {
     RGBTRIPLE temp[height][width];
-    
+
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
@@ -51,14 +51,14 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
             float totalGreen = 0.0;
             float totalBlue = 0.0;
             int count = 0;
-            
+
             for (int row = -1; row <= 1; row++)
             {
                 for (int col = -1; col <= 1; col++)
                 {
                     int new_row = i + row;
                     int new_col = j + col;
-                    
+
                     if (new_row >= 0 && new_row < height && new_col >= 0 && new_col < width)
                     {
                         totalRed += image[new_row][new_col].rgbtRed;
@@ -68,13 +68,13 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
                     }
                 }
             }
-            
-            temp[i][j].rgbtRed = (int) round(totalRed / count);
-            temp[i][j].rgbtGreen = (int) round(totalGreen / count);
-            temp[i][j].rgbtBlue = (int) round(totalBlue / count);
+
+            temp[i][j].rgbtRed = (int)round(totalRed / count);
+            temp[i][j].rgbtGreen = (int)round(totalGreen / count);
+            temp[i][j].rgbtBlue = (int)round(totalBlue / count);
         }
     }
-    
+
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
@@ -87,5 +87,44 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
 // Detect edges
 void edges(int height, int width, RGBTRIPLE image[height][width])
 {
+    RGBTRIPLE temp[height][width];
+
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            int gx_red = 0;
+            int gx_green = 0;
+            int gx_blue = 0;
+            int gy_red = 0;
+            int gy_green = 0;
+            int gy_blue = 0;
+
+            int kernel[3][3] = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}};
+
+            //  i ✖️ j(現在のマス）から3✖️3の範囲を取得
+            for (int row = -1; row <= 1; row++)
+            {
+                for (int col = -1; col <= 1; col++)
+                {
+                    int new_row = i + row;
+                    int new_col = j + col;
+
+                    if (new_row < 0 || new_row >= height || new_col < 0 || new_col >= width)
+                    {  // 画像の端にある場合、次のループへスキップする
+                        continue;
+                    }
+
+                    gx_red += kernel[row + 1][col +1]*image[new_row][new_col].rgbtRed
+
+
+
+
+
+                }
+            }
+        }
+    }
+
     return;
 }
