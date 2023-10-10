@@ -8,11 +8,11 @@ void grayscale(int height, int width, RGBTRIPLE image[height][width])
     {
         for (int j = 0; j < width; j++)
         {
-            float average_color = (float)(image[i][j].rgbtBlue + image[i][j].rgbtGreen + image[i][j].rgbtRed) / 3;
+            float average_color = (float) (image[i][j].rgbtBlue + image[i][j].rgbtGreen + image[i][j].rgbtRed) / 3;
 
-            image[i][j].rgbtBlue = (int)(round(average_color));
-            image[i][j].rgbtGreen = (int)(round(average_color));
-            image[i][j].rgbtRed = (int)(round(average_color));
+            image[i][j].rgbtBlue = (int) (round(average_color));
+            image[i][j].rgbtGreen = (int) (round(average_color));
+            image[i][j].rgbtRed = (int) (round(average_color));
         }
     }
 
@@ -70,9 +70,9 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
                 }
             }
 
-            temp[i][j].rgbtRed = (int)round(totalRed / count);
-            temp[i][j].rgbtGreen = (int)round(totalGreen / count);
-            temp[i][j].rgbtBlue = (int)round(totalBlue / count);
+            temp[i][j].rgbtRed = (int) round(totalRed / count);
+            temp[i][j].rgbtGreen = (int) round(totalGreen / count);
+            temp[i][j].rgbtBlue = (int) round(totalBlue / count);
         }
     }
 
@@ -97,7 +97,7 @@ int integer_control(float value)
     }
     else
     {
-        return (int)round(value);
+        return (int) round(value);
     }
 }
 
@@ -110,14 +110,15 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
     {
         for (int j = 0; j < width; j++)
         {
-            int gx_red = 0;
-            int gx_green = 0;
-            int gx_blue = 0;
-            int gy_red = 0;
-            int gy_green = 0;
-            int gy_blue = 0;
+            float gx_red = 0;
+            float gx_green = 0;
+            float gx_blue = 0;
+            float gy_red = 0;
+            float gy_green = 0;
+            float gy_blue = 0;
 
-            int kernel[3][3] = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}};
+            int gx_kernel[3][3] = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}};
+            int gy_kernel[3][3] = {{-1, -2, -1}, {0, 0, 0}, {1, 2, 1}};
 
             //  i ✖️ j(現在のマス）から3✖️3の範囲を取得
             for (int row = -1; row <= 1; row++)
@@ -132,12 +133,12 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
                         continue;
                     }
 
-                    gx_red += kernel[row + 1][col + 1] * image[new_row][new_col].rgbtRed;
-                    gx_green += kernel[row + 1][col + 1] * image[new_row][new_col].rgbtGreen;
-                    gx_blue += kernel[row + 1][col + 1] * image[new_row][new_col].rgbtBlue;
-                    gy_red += kernel[row + 1][col + 1] * image[new_row][new_col].rgbtRed;
-                    gy_green += kernel[row + 1][col + 1] * image[new_row][new_col].rgbtGreen;
-                    gy_blue += kernel[row + 1][col + 1] * image[new_row][new_col].rgbtBlue;
+                    gx_red += gx_kernel[row + 1][col + 1] * image[new_row][new_col].rgbtRed;
+                    gx_green += gx_kernel[row + 1][col + 1] * image[new_row][new_col].rgbtGreen;
+                    gx_blue += gx_kernel[row + 1][col + 1] * image[new_row][new_col].rgbtBlue;
+                    gy_red += gy_kernel[row + 1][col + 1] * image[new_row][new_col].rgbtRed;
+                    gy_green += gy_kernel[row + 1][col + 1] * image[new_row][new_col].rgbtGreen;
+                    gy_blue += gy_kernel[row + 1][col + 1] * image[new_row][new_col].rgbtBlue;
                 }
             }
 
