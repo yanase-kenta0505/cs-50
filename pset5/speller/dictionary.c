@@ -69,6 +69,7 @@ bool load(const char *dictionary)
     while (fscanf(file, "%s", word) != EOF)
     {
         node *new_node = malloc(sizeof(node));
+
         if (new_node == NULL)
         {
             return false;
@@ -82,13 +83,13 @@ bool load(const char *dictionary)
     }
 
     fclose(file);
+    
     return true;
 }
 
 // Returns number of words in dictionary if loaded, else 0 if not yet loaded
 unsigned int size(void)
 {
-
     if (word_count > 0)
     {
         return word_count;
