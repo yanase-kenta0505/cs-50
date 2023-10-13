@@ -19,6 +19,13 @@ void grayscale(int height, int width, RGBTRIPLE image[height][width])
     return;
 }
 
+void swap(RGBTRIPLE *a, RGBTRIPLE *b)
+{
+    RGBTRIPLE temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
 // Reflect image horizontally
 void reflect(int height, int width, RGBTRIPLE image[height][width])
 {
@@ -26,13 +33,7 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
     {
         for (int j = 0; j < width / 2; j++)
         {
-            // 元の値を保管しておく
-            RGBTRIPLE originImage = image[i][j];
-
-            // 行の最後はwidth - 1 - jで計算できる
-            image[i][j] = image[i][width - 1 - j];
-
-            image[i][width - 1 - j] = originImage;
+            swap(&image[i][j], &image[i][width - 1 -j]);
         }
     }
 
