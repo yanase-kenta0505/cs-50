@@ -8,11 +8,11 @@ void grayscale(int height, int width, RGBTRIPLE image[height][width])
     {
         for (int j = 0; j < width; j++)
         {
-            float average_color = (float) (image[i][j].rgbtBlue + image[i][j].rgbtGreen + image[i][j].rgbtRed) / 3;
+            float averageColor = (float) (image[i][j].rgbtBlue + image[i][j].rgbtGreen + image[i][j].rgbtRed) / 3;
 
-            image[i][j].rgbtBlue = (int) (round(average_color));
-            image[i][j].rgbtGreen = (int) (round(average_color));
-            image[i][j].rgbtRed = (int) (round(average_color));
+            image[i][j].rgbtBlue = (int) (round(averageColor));
+            image[i][j].rgbtGreen = (int) (round(averageColor));
+            image[i][j].rgbtRed = (int) (round(averageColor));
         }
     }
 
@@ -27,12 +27,12 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
         for (int j = 0; j < width / 2; j++)
         {
             // 元の値を保管しておく
-            RGBTRIPLE origin_image = image[i][j];
+            RGBTRIPLE originImage = image[i][j];
 
             // 行の最後はwidth - 1 - jで計算できる
             image[i][j] = image[i][width - 1 - j];
 
-            image[i][width - 1 - j] = origin_image;
+            image[i][width - 1 - j] = originImage;
         }
     }
 
@@ -57,14 +57,14 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
             {
                 for (int col = -1; col <= 1; col++)
                 {
-                    int new_row = i + row;
-                    int new_col = j + col;
+                    int newRow = i + row;
+                    int newCol = j + col;
 
-                    if (new_row >= 0 && new_row < height && new_col >= 0 && new_col < width)
+                    if (newRow >= 0 && newRow < height && newCol >= 0 && newCol < width)
                     {
-                        totalRed += image[new_row][new_col].rgbtRed;
-                        totalGreen += image[new_row][new_col].rgbtGreen;
-                        totalBlue += image[new_row][new_col].rgbtBlue;
+                        totalRed += image[newRow][newCol].rgbtRed;
+                        totalGreen += image[newRow][newCol].rgbtGreen;
+                        totalBlue += image[newRow][newCol].rgbtBlue;
                         count++;
                     }
                 }
@@ -110,45 +110,45 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
     {
         for (int j = 0; j < width; j++)
         {
-            float gx_red = 0;
-            float gx_green = 0;
-            float gx_blue = 0;
-            float gy_red = 0;
-            float gy_green = 0;
-            float gy_blue = 0;
+            float gxRed = 0;
+            float gxGreen = 0;
+            float gxBlue = 0;
+            float gyRed = 0;
+            float gyGreen = 0;
+            float gyBlue = 0;
 
-            int gx_kernel[3][3] = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}};
-            int gy_kernel[3][3] = {{-1, -2, -1}, {0, 0, 0}, {1, 2, 1}};
+            int gxKernel[3][3] = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}};
+            int gyKernel[3][3] = {{-1, -2, -1}, {0, 0, 0}, {1, 2, 1}};
 
             //  i ✖️ j(現在のマス）から3✖️3の範囲を取得
             for (int row = -1; row <= 1; row++)
             {
                 for (int col = -1; col <= 1; col++)
                 {
-                    int new_row = i + row;
-                    int new_col = j + col;
+                    int newRow = i + row;
+                    int newCol = j + col;
 
-                    if (new_row < 0 || new_row >= height || new_col < 0 || new_col >= width)
+                    if (newRow < 0 || newRow >= height || newCol < 0 || newCol >= width)
                     { // 画像の端にある場合、次のループへスキップする
                         continue;
                     }
 
-                    gx_red += gx_kernel[row + 1][col + 1] * image[new_row][new_col].rgbtRed;
-                    gx_green += gx_kernel[row + 1][col + 1] * image[new_row][new_col].rgbtGreen;
-                    gx_blue += gx_kernel[row + 1][col + 1] * image[new_row][new_col].rgbtBlue;
-                    gy_red += gy_kernel[row + 1][col + 1] * image[new_row][new_col].rgbtRed;
-                    gy_green += gy_kernel[row + 1][col + 1] * image[new_row][new_col].rgbtGreen;
-                    gy_blue += gy_kernel[row + 1][col + 1] * image[new_row][new_col].rgbtBlue;
+                    gxRed += gxKernel[row + 1][col + 1] * image[newRow][newCol].rgbtRed;
+                    gxGreen += gxKernel[row + 1][col + 1] * image[newRow][newCol].rgbtGreen;
+                    gxBlue += gxKernel[row + 1][col + 1] * image[newRow][newCol].rgbtBlue;
+                    gyRed += gyKernel[row + 1][col + 1] * image[newRow][newCol].rgbtRed;
+                    gyGreen += gyKernel[row + 1][col + 1] * image[newRow][newCol].rgbtGreen;
+                    gyBlue += gyKernel[row + 1][col + 1] * image[newRow][newCol].rgbtBlue;
                 }
             }
 
-            int calculated_red = integer_control(sqrt(gx_red * gx_red + gy_red * gy_red));
-            int calculated_green = integer_control(sqrt(gx_green * gx_green + gy_green * gy_green));
-            int calculated_blue = integer_control(sqrt(gx_blue * gx_blue + gy_blue * gy_blue));
+            int calculatedRed = integer_control(sqrt(gxRed * gxRed + gyRed * gyRed));
+            int calculatedGreen = integer_control(sqrt(gxGreen * gxGreen + gyGreen * gyGreen));
+            int calculatedBlue = integer_control(sqrt(gxBlue * gxBlue + gyBlue * gyBlue));
 
-            temp[i][j].rgbtRed = calculated_red;
-            temp[i][j].rgbtGreen = calculated_green;
-            temp[i][j].rgbtBlue = calculated_blue;
+            temp[i][j].rgbtRed = calculatedRed;
+            temp[i][j].rgbtGreen = calculatedGreen;
+            temp[i][j].rgbtBlue = calculatedBlue;
         }
     }
 
