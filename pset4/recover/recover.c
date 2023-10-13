@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 {
     if (argc != 2)
     {
-        fprintf(stderr, "Usage: ........\n");
+        fprintf(stderr, "Usage: %s <input_file>\n", argv[0]);
 
         return 1;
     }
@@ -17,14 +17,14 @@ int main(int argc, char *argv[])
 
     if (file == NULL)
     {
-        fprintf(stderr, "........\n");
+        fprintf(stderr, "Could not open input file.\n");
 
         return 1;
     }
 
     int count = 0;
 
-    FILE *output_file = NULL;
+    FILE *outputFile = NULL;
 
     BYTE buffer[512];
 
@@ -33,33 +33,33 @@ int main(int argc, char *argv[])
         // buffer[3]から上位４ビットを飲みを取り出すためにビットマスク(0xf0)を使用する
         if (buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2] == 0xff && (buffer[3] & 0xf0) == 0xe0)
         {
-            if (output_file != NULL)
+            if (outputFile != NULL)
             {
-                fclose(output_file);
+                fclose(outputFile);
             }
 
             char filename[8];
 
             // file名を000.jpg - 999.jpgになるようにする
             sprintf(filename, "%03d.jpg", count++);
-            output_file = fopen(filename, "w");
-            if (output_file == NULL)
+            outputFile = fopen(filename, "w");
+            if (outputFile == NULL)
             {
-                fprintf(stderr, "......");
+                fprintf(stderr, "Could not open output file.\n");
                 fclose(file);
                 return 1;
             }
         }
 
-        if (output_file != NULL)
+        if (outputFile != NULL)
         {
-            fwrite(buffer, sizeof(BYTE), 512, output_file);
+            fwrite(buffer, sizeof(BYTE), 512, outputFile);
         }
     }
 
-    if (output_file != NULL)
+    if (outputFile != NULL)
     {
-        fclose(output_file);
+        fclose(outputFile);
 
         fclose(file);
 
