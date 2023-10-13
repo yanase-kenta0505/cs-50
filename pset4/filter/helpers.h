@@ -1,6 +1,6 @@
 #include "bmp.h"
 
-int integer_control(float value);
+int integerControl(float value);
 
 // Convert image to grayscale
 void grayscale(int height, int width, RGBTRIPLE image[height][width]);

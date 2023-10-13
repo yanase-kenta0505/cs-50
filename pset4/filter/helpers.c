@@ -1,7 +1,7 @@
 #include "helpers.h"
 #include <math.h>
 
-int integer_control(float value)
+int integerControl(float value)
 {
     if (value < 0)
     {
@@ -24,11 +24,11 @@ void grayscale(int height, int width, RGBTRIPLE image[height][width])
     {
         for (int j = 0; j < width; j++)
         {
-            float average_color = (float) (image[i][j].rgbtBlue + image[i][j].rgbtGreen + image[i][j].rgbtRed) / 3;
+            float averageColor = (float) (image[i][j].rgbtBlue + image[i][j].rgbtGreen + image[i][j].rgbtRed) / 3;
 
-            image[i][j].rgbtBlue = (int) (round(average_color));
-            image[i][j].rgbtGreen = (int) (round(average_color));
-            image[i][j].rgbtRed = (int) (round(average_color));
+            image[i][j].rgbtBlue = (int) (round(averageColor));
+            image[i][j].rgbtGreen = (int) (round(averageColor));
+            image[i][j].rgbtRed = (int) (round(averageColor));
         }
     }
 
@@ -46,9 +46,9 @@ void sepia(int height, int width, RGBTRIPLE image[height][width])
             float sepiaGreen = .349 * image[i][j].rgbtRed + .686 * image[i][j].rgbtGreen + .168 * image[i][j].rgbtBlue;
             float sepiaBlue = .272 * image[i][j].rgbtRed + .534 * image[i][j].rgbtGreen + .131 * image[i][j].rgbtBlue;
 
-            image[i][j].rgbtBlue = integer_control(sepiaBlue);
-            image[i][j].rgbtGreen = integer_control(sepiaGreen);
-            image[i][j].rgbtRed = integer_control(sepiaRed);
+            image[i][j].rgbtBlue = integerControl(sepiaBlue);
+            image[i][j].rgbtGreen = integerControl(sepiaGreen);
+            image[i][j].rgbtRed = integerControl(sepiaRed);
         }
     }
 
@@ -63,12 +63,12 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
         for (int j = 0; j < width / 2; j++)
         {
             // 元の値を保管しておく
-            RGBTRIPLE origin_image = image[i][j];
+            RGBTRIPLE originImage = image[i][j];
 
             // 行の最後はwidth - 1 - jで計算できる
             image[i][j] = image[i][width - 1 - j];
 
-            image[i][width - 1 - j] = origin_image;
+            image[i][width - 1 - j] = originImage;
         }
     }
 
@@ -93,14 +93,14 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
             {
                 for (int col = -1; col <= 1; col++)
                 {
-                    int new_row = i + row;
-                    int new_col = j + col;
+                    int newRow = i + row;
+                    int newCol = j + col;
                     
-                    if (new_row >= 0 && new_row < height && new_col >= 0 && new_col < width)
+                    if (newRow >= 0 && newRow < height && newCol >= 0 && newCol < width)
                     {
-                        totalRed += image[new_row][new_col].rgbtRed;
-                        totalGreen += image[new_row][new_col].rgbtGreen;
-                        totalBlue += image[new_row][new_col].rgbtBlue;
+                        totalRed += image[newRow][newCol].rgbtRed;
+                        totalGreen += image[newRow][newCol].rgbtGreen;
+                        totalBlue += image[newRow][newCol].rgbtBlue;
                         count++;
                     }
                 }
