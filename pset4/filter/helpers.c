@@ -55,6 +55,15 @@ void sepia(int height, int width, RGBTRIPLE image[height][width])
     return;
 }
 
+// 要素を入れ替える
+void swap(RGBTRIPLE *a, RGBTRIPLE *b)
+{
+    // 元々の要素の値を変数に格納しておく
+    RGBTRIPLE temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
 // Reflect image horizontally
 void reflect(int height, int width, RGBTRIPLE image[height][width])
 {
@@ -62,13 +71,8 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
     {
         for (int j = 0; j < width / 2; j++)
         {
-            // 元の値を保管しておく
-            RGBTRIPLE originImage = image[i][j];
-
             // 列の最後はwidth - 1 - jで計算できる
-            image[i][j] = image[i][width - 1 - j];
-
-            image[i][width - 1 - j] = originImage;
+            swap(&image[i][j], &image[i][width - 1 - j]);
         }
     }
 
@@ -79,7 +83,7 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
 void blur(int height, int width, RGBTRIPLE image[height][width])
 {
     RGBTRIPLE temp[height][width];
-    
+
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
@@ -88,14 +92,14 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
             float totalGreen = 0.0;
             float totalBlue = 0.0;
             int count = 0;
-            
+
             for (int row = -1; row <= 1; row++)
             {
                 for (int col = -1; col <= 1; col++)
                 {
                     int newRow = i + row;
                     int newCol = j + col;
-                    
+
                     if (newRow >= 0 && newRow < height && newCol >= 0 && newCol < width)
                     {
                         totalRed += image[newRow][newCol].rgbtRed;
@@ -105,13 +109,13 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
                     }
                 }
             }
-            
+
             temp[i][j].rgbtRed = (int) round(totalRed / count);
             temp[i][j].rgbtGreen = (int) round(totalGreen / count);
             temp[i][j].rgbtBlue = (int) round(totalBlue / count);
         }
     }
-    
+
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
