@@ -1,7 +1,7 @@
 #include "helpers.h"
 #include <math.h>
 
-int integerControl(float value)
+int integer_control(float value)
 {
     if (value < 0)
     {
@@ -46,9 +46,9 @@ void sepia(int height, int width, RGBTRIPLE image[height][width])
             float sepiaGreen = .349 * image[i][j].rgbtRed + .686 * image[i][j].rgbtGreen + .168 * image[i][j].rgbtBlue;
             float sepiaBlue = .272 * image[i][j].rgbtRed + .534 * image[i][j].rgbtGreen + .131 * image[i][j].rgbtBlue;
 
-            image[i][j].rgbtBlue = integerControl(sepiaBlue);
-            image[i][j].rgbtGreen = integerControl(sepiaGreen);
-            image[i][j].rgbtRed = integerControl(sepiaRed);
+            image[i][j].rgbtBlue = integer_control(sepiaBlue);
+            image[i][j].rgbtGreen = integer_control(sepiaGreen);
+            image[i][j].rgbtRed = integer_control(sepiaRed);
         }
     }
 
@@ -65,7 +65,7 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
             // 元の値を保管しておく
             RGBTRIPLE originImage = image[i][j];
 
-            // 行の最後はwidth - 1 - jで計算できる
+            // 列の最後はwidth - 1 - jで計算できる
             image[i][j] = image[i][width - 1 - j];
 
             image[i][width - 1 - j] = originImage;
