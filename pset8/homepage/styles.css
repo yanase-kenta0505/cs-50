@@ -1,0 +1,25 @@
+h1 {
+    color: red;
+}
+
+#foo {
+    font-weight: bold;
+}
+
+.boo {
+    margin-top: 5px;
+}
+
+h4 {
+    background-color: pink;
+}
+
+a {
+    cursor: none;
+}
+
+@media screen and (max-width: 600px) {
+    body {
+        background-color: lavender;
+    }
+}
