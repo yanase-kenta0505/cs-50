@@ -135,6 +135,9 @@ bool unload(void)
         node *cursor = table[i];
         while (cursor != NULL)
         {
+            // tempに格納するのはcursorを直接解放するとcursor = cursor->next;が
+            // ダングリングポイント（どこか不定の、もはや有効でないメモリ領域を指すポインタ）を参照しようとして
+            // 未定義の挙動が発生する
             node *temp = cursor;
             cursor = cursor->next;
             free(temp);
